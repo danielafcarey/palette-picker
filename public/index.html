@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Palette Picker</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Palette Picker</h1> 
+    </header>
+
+    <section class="current-palette">
+      <div class="color-cards-container">
+        <div class="color-card card-1"></div>
+        <div class="color-card card-2"></div>
+        <div class="color-card card-3"></div>
+        <div class="color-card card-4"></div>
+        <div class="color-card card-5"></div>
+      </div> 
+      <button class="new-palette-button">Generate new palette</button>
+      <form class="save-palette">
+        <select>
+          <option value="project-1">Project 1</option> 
+          <option value="project-2">Project 2</option> 
+        </select> 
+        <input placeholder="Palette name" type="text" />
+        <button type="submit">Save</button>
+      </form>
+    </section>
+
+    <section class="projects">
+      <h2>Saved Projects</h2>
+      <h4>Create a new project:</h4>
+      <form>
+        <input placeholder="Project name" type="text" />
+        <button type="submit">Create</button>
+      </form>
+      <div class="projects-container">
+         
+      </div>
+    
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/scripts.js"></script>
+  </body>
+</html>
