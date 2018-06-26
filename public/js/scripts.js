@@ -11,22 +11,35 @@ $(document).ready(() => {
     card4,
     card5
   ]
-  
+
   generateNewPalette();
   $('.new-palette-button').on('click', generateNewPalette);
+  $('.lock').on('click', toggleLock);
 
-  function getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF'.split('');
+    let color = '#';
+    for (var i = 0; i < 6; i++ ) {
+      color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
   }
 
   function generateNewPalette() {
     allCards.forEach(card => {
-      let randomNum1 = getRandomNumber(0, 255);
-      let randomNum2 = getRandomNumber(0, 255);
-      let randomNum3 = getRandomNumber(0, 255);
-
-      let randomColor = `rgba(${randomNum1}, ${randomNum2}, ${randomNum3})`
-      card.css('background-color', randomColor);
+      if (!card[0].classList.contains('locked')) {
+        let randomColor = getRandomColor();
+        card.css('background-color', randomColor);
+        card.children('p').text(randomColor);
+      }
     })
   }
+
+  function toggleLock(event) {
+    const { classList } = event.target.parentElement;
+    classList.toggle('locked');
+  }
+
+
+
 })
