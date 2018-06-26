@@ -31,17 +31,24 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
   const project = projects.find(project => project.id === id);
 
   if (project) {
-    const palettes = palettes.filter(palette => palette.project_id === id);
-    response.status(200).json(palettes);
+    const projectPalettes = palettes.filter(palette => palette.project_id === id);
+    response.status(200).json(projectPalettes);
   } else {
     response.sendStatus(404);
   }
 })
 
 
-// GET A SPECIFIC PALETTE ON A PROJECT - returns a palette object
-app.get('/api/v1/projects/:id/palettes/:id', (request, response) => {
+// GET A SPECIFIC PALETTE - returns a palette object
+app.get('/api/v1/projects/palettes/:id', (request, response) => {
+  const { id } = request.params;
+  const palette = palettes.find(palette => palette.id === id);
 
+  if (palette) {
+    response.status(200).json(palette);
+  } else {
+    response.sendStatus(404);
+  }
 })
 
 
@@ -50,20 +57,24 @@ app.post('/api/v1/projects', (request, response) => {
 
 })
 
+
 // ADD A PALETTE TO A PROJECT
 app.post('/api/v1/projects/:id/palettes', (request, response) => {
 
 })
+
 
 // DELETE A PROJECT
 app.post('/api/v1/projects/:id', (request, response) => {
 
 })
 
+
 // DELETE A PALETTE FROM A PROJECT
 app.post('/api/v1/projects/:id/palettes/:id', (request, response) => {
 
 })
+
 
 app.listen(app.get('port'), () => {
   console.log(`Palette Picker is running on ${app.get('port')}`)
