@@ -1,17 +1,32 @@
 body {
   text-align: center;
   font-size: 20px;
+  background-color: #232323;
+  color: #c0c0c0;
+  margin: 0;
 }
 
 .color-cards-container {
   display: flex;
   flex-direction: row;
-  margin: 0 auto;
+  justify-content: center;
 }    
 
 .color-card {
-  margin: 10px;
-  width: 300px;
+  width: 20%;
   height: 500px;
   background-color: grey;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: flex-end;
+}
+
+.color-card img {
+  height: 50px;
+  padding: 20px;
+}
+
+.color-card img:hover {
+  cursor: pointer;
 }
