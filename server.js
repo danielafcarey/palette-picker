@@ -52,15 +52,45 @@ app.get('/api/v1/projects/palettes/:id', (request, response) => {
 })
 
 
-// ADD A PROJECT
+// ADD A PROJECT - send name in the body
 app.post('/api/v1/projects', (request, response) => {
+  const id = Date.now().toString();
+  const { name } = request.body;
 
+  if (!name) {
+    response.status(422).send({
+      error: 'No name provided in request body.'
+    }); 
+  } else {
+    projects.push({ id, name }); 
+    response.status(201).json({ id, name });
+  }
 })
 
 
 // ADD A PALETTE TO A PROJECT
-app.post('/api/v1/projects/:id/palettes', (request, response) => {
+app.post('/api/v1/projects/:project_id/palettes', (request, response) => {
+  const { project_id } = request.params;
+  const id = Date.now().toString();
+  const { name, colors } = request.body;
+  const newPalette = { id, name, project_id, colors };
 
+  if (!name) {
+    response.status(422).send({
+      error: 'No name provided in request body.'
+    });
+  } else if (!colors) {
+    response.status(422).send({
+      error: 'No colors provided in request body.'
+    });
+  } else if (colors.length !== 5) {
+    response.status(422).send({
+      error: 'Colors should be an array of 5 hex color code strings pass into the request body.'
+    });
+  } else {
+    palettes.push(newPalette);
+    response.status(201).json(newPalette);
+  }
 })
 
 
