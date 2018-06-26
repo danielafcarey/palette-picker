@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
 const { projects, palettes } = require('./mockData.js');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static('public'));
@@ -95,13 +99,13 @@ app.post('/api/v1/projects/:project_id/palettes', (request, response) => {
 
 
 // DELETE A PROJECT
-app.post('/api/v1/projects/:id', (request, response) => {
-
+app.delete('/api/v1/projects/:id', (request, response) => {
+  
 })
 
 
 // DELETE A PALETTE FROM A PROJECT
-app.post('/api/v1/projects/:id/palettes/:id', (request, response) => {
+app.delete('/api/v1/projects/:id/palettes/:id', (request, response) => {
 
 })
 
