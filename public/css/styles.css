@@ -1,9 +1,21 @@
 body {
   text-align: center;
   font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
   background-color: #232323;
   color: white;
   margin: 0;
+}
+
+h1 {
+  font-family: 'Homemade Apple', cursive;
+  text-align: left;
+  padding-left: 30px;
+  margin: 20px 0 10px 0;
+}
+
+h1, h2, h4 {
+  font-weight: 400;
 }
 
 .color-cards-container {
@@ -33,10 +45,131 @@ body {
   border-radius: 50%;
 }
 
-.color-card button:hover {
+button:hover {
   cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover {
+  font-weight: 400;
+}
+
+.color-card p {
+  text-shadow: 1px 1px #949393;
 }
 
 .locked button {
   background-image: url('../lock-fill.png');
 }
+
+.new-palette-button {
+  width: 300px;
+  height: 50px;
+  font-size: 24px;
+  margin: 25px;
+  border: 2px solid white;
+  background: none;
+  color: white;
+  border-radius: 25px;
+  font-weight: 300;
+  letter-spacing: 1.2px;
+}
+
+.save-palette {
+  margin: 20px auto;
+}
+
+.save-palette h4 {
+  display: inline-block;
+  font-size: 22px;
+  margin: 0;
+}
+
+.save-palette input {
+  width: 300px;
+  height: 38px;
+  font-size: 18px;
+  padding: 0 7px;
+  border-radius: 5px;
+  border: none;
+  margin: 0 10px;
+}
+
+.save-palette select {
+  width: 150px;
+  height: 38px;
+  font-size: 18.5px;
+  border: none;
+  color: #232323;
+}
+
+.save-palette button {
+  width: 100px;
+  height: 38px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  padding: 0;
+  margin: 0 10px;
+  color: #232323;
+}
+
+.projects {
+  display: grid;
+  grid-template-rows: 130px calc(100% - 100px);
+  grid-template-columns: 2fr 1fr;
+}
+
+.projects h2 {
+  grid-area: 1/1/2/2;
+  font-family: 'Homemade Apple', cursive;
+  text-align: left;
+  padding-left: 35px;
+  text-decoration: underline;
+}
+
+.projects h4 {
+  grid-area: 1/2/2/3;
+  margin: 10px 0;
+}
+
+.projects form {
+  grid-area: 1/2/2/3;
+}
+
+.projects input {
+  display: block;
+  width: 80%;
+  margin: 10px auto;
+  height: 25px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+}
+
+.projects input::placeholder {
+  padding-left: 5px;
+}
+
+.projects button {
+  width: 80%;
+  height: 25px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  color: #232323;
+}
+
+
+
+
+
+
+
+
+
+
+

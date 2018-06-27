@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Palette Picker</title>
+    <link href="https://fonts.googleapis.com/css?family=Homemade+Apple|Open+Sans:300,400,600,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
   </head>
   <body>
@@ -34,19 +35,22 @@
       </div> 
       <button class="new-palette-button">Generate new palette</button>
       <form class="save-palette">
+        <h4>Save Palette:</h4>
+        <input placeholder="Palette name" type="text" />
         <select>
           <option value="project-1">Project 1</option> 
           <option value="project-2">Project 2</option> 
         </select> 
-        <input placeholder="Palette name" type="text" />
         <button type="submit">Save</button>
       </form>
     </section>
 
+    <hr />
+
     <section class="projects">
       <h2>Saved Projects</h2>
-      <h4>Create a new project:</h4>
       <form>
+        <h4>Create a new project:</h4>
         <input placeholder="Project name" type="text" />
         <button type="submit">Create</button>
       </form>
