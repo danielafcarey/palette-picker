@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { projects, palettes } = require('./mockData.js');
+let { projects, palettes } = require('./mockData.js');
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
@@ -14,6 +14,7 @@ app.use(express.static('public'));
 app.get('/api/v1/projects', (request, response) => {
   response.json(projects);
 });
+
 
 // GET A PROJECT = returns a project object
 app.get('/api/v1/projects/:id', (request, response) => {
@@ -44,7 +45,7 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
 
 
 // GET A SPECIFIC PALETTE - returns a palette object
-app.get('/api/v1/projects/palettes/:id', (request, response) => {
+app.get('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
   const palette = palettes.find(palette => palette.id === id);
 
@@ -72,7 +73,7 @@ app.post('/api/v1/projects', (request, response) => {
 })
 
 
-// ADD A PALETTE TO A PROJECT
+// ADD A PALETTE TO A PROJECT - send name and colors in body
 app.post('/api/v1/projects/:project_id/palettes', (request, response) => {
   const { project_id } = request.params;
   const id = Date.now().toString();
@@ -100,13 +101,29 @@ app.post('/api/v1/projects/:project_id/palettes', (request, response) => {
 
 // DELETE A PROJECT
 app.delete('/api/v1/projects/:id', (request, response) => {
-  
+  const { id } = request.params;
+  const projectToDelete = projects.find(project => project.id === id);
+
+  if (projectToDelete) {
+    projects = projects.filter(project => project.id !== id);
+    response.status(200).send(`Deleted ${ projectToDelete.name }.`);
+  } else {
+    response.sendStatus(204);
+  }
 })
 
 
 // DELETE A PALETTE FROM A PROJECT
-app.delete('/api/v1/projects/:id/palettes/:id', (request, response) => {
+app.delete('/api/v1/palettes/:id', (request, response) => {
+  const { id } = request.params;
+  const paletteToDelete = palettes.find(palette => palette.id === id);
 
+  if (paletteToDelete) {
+    palettes = palettes.filter(palette => palette.id !== id);
+    response.status(200).send(`Deleted ${ paletteToDelete.name }`);
+  } else {
+    response.sendStatus(204);
+  }
 })
 
 
