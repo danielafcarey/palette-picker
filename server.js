@@ -90,15 +90,15 @@ app.post('/api/v1/projects', (request, response) => {
     response.status(422).send({
       error: `Expected format: { name: <String> }. You're missing a name property.`
     }); 
+  } else {
+    database('projects').insert(project, 'id')
+      .then(project_id => {
+        response.status(201).json({ project_id: project_id[0] });
+      })
+      .catch(error => {
+        response.status(500).json({ error });
+      });
   }
-
-  database('projects').insert(project, 'id')
-    .then(project_id => {
-      response.status(201).json({ project_id: project_id[0] });
-    })
-    .catch(error => {
-      response.status(500).json({ error });
-    });
 
 });
 
