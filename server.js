@@ -28,13 +28,20 @@ app.get('/api/v1/projects', (request, response) => {
 // GET A PROJECT = returns a project object
 app.get('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
-  const project = projects.find(project => project.id === id);
 
-  if (project) {
-    response.status(200).json(project);
-  } else {
-    response.sendStatus(404);
-  }
+  database('projects').where('id', id).select()
+    .then(project => {
+      if (project.length) {
+        response.status(200).json(project[0]);
+      } else {
+        response.status(404).json({
+          error: `Could not find project with id ${ id }.`
+        })
+      }
+    })
+    .catch(error => {
+      respons.status(500).json({ error });
+    });
 
 });
 
