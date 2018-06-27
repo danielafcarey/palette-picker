@@ -3,6 +3,10 @@ const app = express();
 let { projects, palettes } = require('./mockData.js');
 const bodyParser = require('body-parser');
 
+const env = process.env.NODE_ENV || 'development';
+const config = require('./knexfile')[env];
+const database = require('knex')(config);
+
 app.use(bodyParser.json());
 
 app.set('port', process.env.PORT || 3000);
