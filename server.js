@@ -145,14 +145,33 @@ app.post('/api/v1/projects/:project_id/palettes', (request, response) => {
 // DELETE A PROJECT
 app.delete('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
-  const projectToDelete = projects.find(project => project.id === id);
 
-  if (projectToDelete) {
-    projects = projects.filter(project => project.id !== id);
-    response.sendStatus(204);
-  } else {
-    response.sendStatus(404);
-  }
+  database('projects').where('id', id).select()
+    .then(project => {
+      if (!project.length) {
+        response.status(404).send({
+          error: `Could not find project with id ${ project_id }.`
+        })
+      } else {
+        database('palettes').where('project_id', id).del()
+          .then(() => {
+            database('projects').where('id', id).del()
+              .then(deletedProject => {
+                response.status(200).send(`Deleted ${ deletedProject } project of id ${ id }.`)
+              })
+              .catch(error => {
+                response.status(500).json({ error })
+              })
+          })
+          .catch(error => {
+            response.status(500).json({ error })
+          })
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    });
+
 })
 
 
@@ -163,7 +182,7 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
 
   if (paletteToDelete) {
     palettes = palettes.filter(palette => palette.id !== id);
-    response.sendStatus(204);
+    response.sendStatus(200);
   } else {
     response.sendStatus(404);
   }
