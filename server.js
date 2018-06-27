@@ -63,13 +63,21 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
 // GET A SPECIFIC PALETTE - returns a palette object
 app.get('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
-  const palette = palettes.find(palette => palette.id === id);
 
-  if (palette) {
-    response.status(200).json(palette);
-  } else {
-    response.sendStatus(404);
-  }
+  database('palettes').where('id', id).select()
+    .then(palette => {
+      if (palette.length) {
+        response.status(200).json(palette[0]);
+      } else {
+        response.status(404).json({
+          error: `Could not find palette with id ${ id }.`
+        })
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    })
+
 })
 
 
