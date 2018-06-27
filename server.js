@@ -77,9 +77,9 @@ app.get('/api/v1/palettes/:id', (request, response) => {
     })
     .catch(error => {
       response.status(500).json({ error });
-    })
+    });
 
-})
+});
 
 
 // ADD A PROJECT - send name in the body
@@ -87,18 +87,18 @@ app.post('/api/v1/projects', (request, response) => {
   const project = request.body;
 
   if (!project.name) {
-    response.status(422).send({
+    return response.status(422).send({
       error: `Expected format: { name: <String> }. You're missing a name property.`
     }); 
-  } else {
-    database('projects').insert(project, 'id')
-      .then(project_id => {
-        response.status(201).json({ project_id: project_id[0] });
-      })
-      .catch(error => {
-        response.status(500).json({ error });
-      });
   }
+
+  database('projects').insert(project, 'id')
+    .then(project_id => {
+      response.status(201).json({ project_id: project_id[0] });
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
 
 });
 
@@ -106,27 +106,40 @@ app.post('/api/v1/projects', (request, response) => {
 // ADD A PALETTE TO A PROJECT - send name and colors in body
 app.post('/api/v1/projects/:project_id/palettes', (request, response) => {
   const { project_id } = request.params;
-  const id = Date.now().toString();
-  const { name, colors } = request.body;
-  const newPalette = { id, name, project_id, colors };
+  const palette = request.body;
+  const requiredParams =  ['name', 'color1', 'color2', 'color3', 'color4', 'color5'];
 
-  if (!name) {
-    response.status(422).send({
-      error: 'No name provided in request body.'
-    });
-  } else if (!colors) {
-    response.status(422).send({
-      error: 'No colors provided in request body.'
-    });
-  } else if (colors.length !== 5) {
-    response.status(422).send({
-      error: 'Colors should be an array of 5 hex color code strings pass into the request body.'
-    });
-  } else {
-    palettes.push(newPalette);
-    response.status(201).json(newPalette);
+  for (let requiredParam of requiredParams) {
+    if (!palette[requiredParam]) {
+      return response.status(422).send({
+        error: `Expected format: { name: <String>, color1: <String>, color2: <String>, color3: <String>, color4: <String>, color5: <String> }. You're missing a ${ requiredParam } property`
+      })
+    }
   }
-})
+
+  database('projects').where('id', project_id).select()
+    .then(project => {
+      if (!project.length) {
+        response.status(404).send({
+          error: `Could not find project with id ${ project_id }.`
+        })
+      } else {
+        const newPalette = { ...palette, project_id };
+
+        database('palettes').insert(newPalette, 'id')
+          .then(palette_id => {
+            response.status(201).json({ palette_id: palette_id[0] })
+          })
+          .catch(error => {
+            response.status(500).json({ error })
+          })
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+
+});
 
 
 // DELETE A PROJECT
