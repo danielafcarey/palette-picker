@@ -150,7 +150,7 @@ app.delete('/api/v1/projects/:id', (request, response) => {
     .then(project => {
       if (!project.length) {
         response.status(404).send({
-          error: `Could not find project with id ${ project_id }.`
+          error: `Could not find project with id ${ id }.`
         })
       } else {
         database('palettes').where('project_id', id).del()
@@ -178,14 +178,26 @@ app.delete('/api/v1/projects/:id', (request, response) => {
 // DELETE A PALETTE FROM A PROJECT
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
-  const paletteToDelete = palettes.find(palette => palette.id === id);
 
-  if (paletteToDelete) {
-    palettes = palettes.filter(palette => palette.id !== id);
-    response.sendStatus(200);
-  } else {
-    response.sendStatus(404);
-  }
+  database('palettes').where('id', id).select()
+    .then(palette => {
+      if (!palette.length) {
+        response.status(404).send({
+          error: `Could not find palette with id ${ id }.`
+        })
+      } else {
+        database('palettes').where('id', id).del()
+          .then(deletedPalette => {
+            response.status(200).send(`Deleted ${ deletedPalette } palette with id ${ id }.`)
+          })
+          .catch(error => {
+            response.status(500).json({ error })
+          })
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
 })
 
 
