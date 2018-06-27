@@ -46,7 +46,7 @@ app.get('/api/v1/projects/:id', (request, response) => {
 });
 
 
-// GET ALL PALETTES FOR A PROJECT - returns an array of palettes
+// GET ALL PALETTES FOR A PROJECT - returns an array of palettes (gets empty array if no palettes match)
 app.get('/api/v1/projects/:id/palettes', (request, response) => {
   const { id } = request.params;
 
@@ -84,18 +84,23 @@ app.get('/api/v1/palettes/:id', (request, response) => {
 
 // ADD A PROJECT - send name in the body
 app.post('/api/v1/projects', (request, response) => {
-  const id = Date.now().toString();
-  const { name } = request.body;
+  const project = request.body;
 
-  if (!name) {
+  if (!project.name) {
     response.status(422).send({
-      error: 'No name provided in request body.'
+      error: `Expected format: { name: <String> }. You're missing a name property.`
     }); 
-  } else {
-    projects.push({ id, name }); 
-    response.status(201).json({ id, name });
   }
-})
+
+  database('projects').insert(project, 'id')
+    .then(project_id => {
+      response.status(201).json({ project_id: project_id[0] });
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+
+});
 
 
 // ADD A PALETTE TO A PROJECT - send name and colors in body
