@@ -4,7 +4,6 @@ let { projects, palettes } = require('./mockData.js');
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static('public'));
@@ -106,9 +105,9 @@ app.delete('/api/v1/projects/:id', (request, response) => {
 
   if (projectToDelete) {
     projects = projects.filter(project => project.id !== id);
-    response.status(200).send(`Deleted ${ projectToDelete.name }.`);
-  } else {
     response.sendStatus(204);
+  } else {
+    response.sendStatus(404);
   }
 })
 
@@ -120,9 +119,9 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
 
   if (paletteToDelete) {
     palettes = palettes.filter(palette => palette.id !== id);
-    response.status(200).send(`Deleted ${ paletteToDelete.name }`);
-  } else {
     response.sendStatus(204);
+  } else {
+    response.sendStatus(404);
   }
 })
 
