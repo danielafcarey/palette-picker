@@ -49,15 +49,16 @@ app.get('/api/v1/projects/:id', (request, response) => {
 // GET ALL PALETTES FOR A PROJECT - returns an array of palettes
 app.get('/api/v1/projects/:id/palettes', (request, response) => {
   const { id } = request.params;
-  const project = projects.find(project => project.id === id);
 
-  if (project) {
-    const projectPalettes = palettes.filter(palette => palette.project_id === id);
-    response.status(200).json(projectPalettes);
-  } else {
-    response.sendStatus(404);
-  }
-})
+  database('palettes').where('project_id', id).select()
+    .then(palettes => {
+      response.status(200).json(palettes)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    });
+
+});
 
 
 // GET A SPECIFIC PALETTE - returns a palette object
