@@ -11,10 +11,12 @@ $(document).ready(() => {
     card4,
     card5
   ]
+  const projects = $('.projects-container');
 
   generateNewPalette();
   $('.new-palette-button').on('click', generateNewPalette);
   $('.lock').on('click', toggleLock);
+  $('.create-project-form').on('submit', addProject);
 
   function getRandomColor() {
     const letters = '0123456789ABCDEF'.split('');
@@ -40,6 +42,74 @@ $(document).ready(() => {
     classList.toggle('locked');
   }
 
+  async function addProject(event) {
+    event.preventDefault();
+    const name = $('.create-project-form :input').val();
+    const url = 'http://localhost:3000/api/v1/projects'
+    const options = {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name }) 
+    }
 
+    const response = await fetch(url, options);
+    const { project_id }= await response.json();
+    const projectPalettes = await getProjectPalettes(project_id);
+    const project = { project_id, name, projectPalettes }
+    
+    appendProject(project);
+    updateProjectOptions(project);
+  }
+
+  async function getProjectPalettes(project_id) {
+    const url = `http://localhost:3000/api/v1/projects/${project_id}/palettes`;
+    const response = await fetch(url);
+    const projectPalettes = await response.json();
+
+    return projectPalettes;
+  }
+
+  function appendProject({ project_id, name, projectPalettes }) {
+    const palettes = createPaletteElements(projectPalettes);
+    const newProject = `
+      <div class="project" id=${ project_id } >
+        <h3>${ name }</h3> 
+        ${ palettes } 
+      </div>
+    ` 
+    $('.projects-container').append(newProject);
+  }
+
+  function createPaletteElements(palettes) {
+    let allPalettes = '';
+
+    if (palettes.length) {
+      allPalettes = palettes.reduce((allPalettes, palette) => {
+        const { name, color1, color2, color3, color4, color5 } = palette;
+        const paletteElement = `
+          <div class="palette" >
+            <h4>${ name }</h4>
+            <div style="background-color:${ color1 };"></div>
+            <div style="background-color:${ color2 };"></div>
+            <div style="background-color:${ color3 };"></div>
+            <div style="background-color:${ color4 };"></div>
+            <div style="background-color:${ color5 };"></div>
+          </div>
+        `;
+        allPalettes + paletteElement
+      }, '')
+    }
+
+    return `<div class="projectPalettes">${ allPalettes }</div>`
+  }
+
+  function updateProjectOptions({ name, project_id }) {
+    const projectOption = `
+      <option value=${ name } id=${ project_id }>
+      ${ name } 
+      </option>
+      ` 
+    $('.project-options').append(projectOption);
+  }
 
 })

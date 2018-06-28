@@ -37,9 +37,10 @@
       <form class="save-palette">
         <h4>Save Palette:</h4>
         <input placeholder="Palette name" type="text" />
-        <select>
-          <option value="project-1">Project 1</option> 
-          <option value="project-2">Project 2</option> 
+        <select class="project-options">
+          <option value="" disabled >
+            (create or choose a project)
+          </option>
         </select> 
         <button type="submit">Save</button>
       </form>
@@ -49,7 +50,7 @@
 
     <section class="projects">
       <h2>Saved Projects</h2>
-      <form>
+      <form class="create-project-form" >
         <h4>Create a new project:</h4>
         <input placeholder="Project name" type="text" />
         <button type="submit">Create</button>
