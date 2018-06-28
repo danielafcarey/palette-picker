@@ -151,6 +151,7 @@ $(document).ready(() => {
     const palette = { name, color1, color2, color3, color4, color5 }
   
     const { palette_id } = await postPalette(palette, id);
+    palette.id = palette_id;
     appendPalette(palette, id);
   }
 
