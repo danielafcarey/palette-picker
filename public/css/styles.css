@@ -163,7 +163,11 @@ button:hover {
   color: #232323;
 }
 
-
+.palette div {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
 
 
 

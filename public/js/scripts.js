@@ -77,9 +77,9 @@ $(document).ready(() => {
     }
 
     const response = await fetch(url, options);
-    const { project_id }= await response.json();
+    const { project_id } = await response.json();
     const projectPalettes = await getProjectPalettes(project_id);
-    const project = { project_id, name, projectPalettes }
+    const project = { id: project_id, name, projectPalettes }
     
     appendProject(project);
     updateProjectOptions(project);
@@ -93,10 +93,10 @@ $(document).ready(() => {
     return projectPalettes;
   }
 
-  function appendProject({ project_id, name, projectPalettes }) {
+  function appendProject({ id, name, projectPalettes }) {
     const palettes = createPaletteElements(projectPalettes);
     const newProject = `
-      <div class="project" id=${ project_id } >
+      <div class="project" id=${ id } >
         <h3>${ name }</h3> 
         ${ palettes } 
       </div>
@@ -120,16 +120,16 @@ $(document).ready(() => {
             <div style="background-color:${ color5 };"></div>
           </div>
         `;
-        allPalettes + paletteElement
+        return allPalettes + paletteElement
       }, '')
     }
-
+    
     return `<div class="projectPalettes">${ allPalettes }</div>`
   }
 
-  function updateProjectOptions({ name, project_id }) {
+  function updateProjectOptions({ name, id }) {
     const projectOption = `
-      <option value=${ name } id=${ project_id }>
+      <option value=${ name } id=${ id }>
       ${ name } 
       </option>
       ` 
