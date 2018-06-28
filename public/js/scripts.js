@@ -18,6 +18,7 @@ $(document).ready(() => {
   $('.new-palette-button').on('click', generateNewPalette);
   $('.lock').on('click', toggleLock);
   $('.create-project-form').on('submit', addProject);
+  $('.save-palette').on('submit', savePalette);
 
   function getRandomColor() {
     const letters = '0123456789ABCDEF'.split('');
@@ -98,7 +99,9 @@ $(document).ready(() => {
     const newProject = `
       <div class="project" id=${ id } >
         <h3>${ name }</h3> 
-        ${ palettes } 
+        <div class="project-palettes">
+          ${ palettes } 
+        </div>
       </div>
     ` 
     $('.projects-container').append(newProject);
@@ -124,7 +127,7 @@ $(document).ready(() => {
       }, '')
     }
     
-    return `<div class="projectPalettes">${ allPalettes }</div>`
+    return allPalettes;
   }
 
   function updateProjectOptions({ name, id }) {
@@ -134,6 +137,37 @@ $(document).ready(() => {
       </option>
       ` 
     $('.project-options').append(projectOption);
+  }
+
+  function savePalette(event) {
+    event.preventDefault();
+    const name = $('.save-palette :input').val();
+    const id = $('.project-options option:selected').attr('id');
+    const color1 = $('.card-1 p')[0].innerText;
+    const color2 = $('.card-2 p')[0].innerText;
+    const color3 = $('.card-3 p')[0].innerText;
+    const color4 = $('.card-4 p')[0].innerText;
+    const color5 = $('.card-5 p')[0].innerText;
+    const palette = { name, color1, color2, color3, color4, color5 }
+  
+    postPalette(palette, id);
+    appendPalette(palette, id);
+  }
+
+  async function postPalette(palette, id) {
+    const url = `http://localhost:3000/api/v1/projects/${ id }/palettes`
+    const options = {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify( palette ) 
+    }
+
+    const response = await fetch(url, options);
+    console.log(response);
+  }
+
+  function appendPalette(palette) {
+
   }
 
 })
