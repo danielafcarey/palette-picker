@@ -163,11 +163,12 @@ $(document).ready(() => {
     }
 
     const response = await fetch(url, options);
-    console.log(response);
   }
 
-  function appendPalette(palette) {
-
+  function appendPalette(palette, id) {
+    const project = $(`div#${ id }.project`);
+    const paletteElement = createPaletteElements([palette])
+    project.append(paletteElement);
   }
 
 })
