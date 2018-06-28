@@ -14,6 +14,7 @@ $(document).ready(() => {
   const projects = $('.projects-container');
 
   generateNewPalette();
+  populateProjects();
   $('.new-palette-button').on('click', generateNewPalette);
   $('.lock').on('click', toggleLock);
   $('.create-project-form').on('submit', addProject);
@@ -40,6 +41,29 @@ $(document).ready(() => {
   function toggleLock(event) {
     const { classList } = event.target.parentElement;
     classList.toggle('locked');
+  }
+
+  async function populateProjects() {
+    //get all projects (array)
+    const projects = await getAllProjects();
+    //iterate over and run appendProject for each one
+    projects.forEach(project => {
+      appendProject(project)
+      updateProjectOptions(project);
+    })
+  }
+
+  async function getAllProjects() {
+    const url = 'http://localhost:3000/api/v1/projects';
+    const response = await fetch(url);
+    const projects = await response.json();
+    const fullProjectPromises = projects.map(async project => {
+      const { name, id } = project;
+      const projectPalettes = await getProjectPalettes(id);
+      return { name, id, projectPalettes }
+    })
+
+    return Promise.all(fullProjectPromises);
   }
 
   async function addProject(event) {
