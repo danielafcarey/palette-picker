@@ -19,6 +19,7 @@ $(document).ready(() => {
   $('.lock').on('click', toggleLock);
   $('.create-project-form').on('submit', addProject);
   $('.save-palette').on('submit', savePalette);
+  $('.projects-container').on('click', '.delete-palette-button', deletePalette);
 
   function getRandomColor() {
     const letters = '0123456789ABCDEF'.split('');
@@ -45,9 +46,7 @@ $(document).ready(() => {
   }
 
   async function populateProjects() {
-    //get all projects (array)
     const projects = await getAllProjects();
-    //iterate over and run appendProject for each one
     projects.forEach(project => {
       appendProject(project)
       updateProjectOptions(project);
@@ -112,15 +111,16 @@ $(document).ready(() => {
 
     if (palettes.length) {
       allPalettes = palettes.reduce((allPalettes, palette) => {
-        const { name, color1, color2, color3, color4, color5 } = palette;
+        const { id, name, color1, color2, color3, color4, color5 } = palette;
         const paletteElement = `
-          <div class="palette" >
+          <div class="palette" id=${ id }>
             <h4>${ name }</h4>
             <div style="background-color:${ color1 };"></div>
             <div style="background-color:${ color2 };"></div>
             <div style="background-color:${ color3 };"></div>
             <div style="background-color:${ color4 };"></div>
             <div style="background-color:${ color5 };"></div>
+            <button class="delete-palette-button"> X </button>
           </div>
         `;
         return allPalettes + paletteElement
@@ -139,7 +139,7 @@ $(document).ready(() => {
     $('.project-options').append(projectOption);
   }
 
-  function savePalette(event) {
+  async function savePalette(event) {
     event.preventDefault();
     const name = $('.save-palette :input').val();
     const id = $('.project-options option:selected').attr('id');
@@ -150,7 +150,7 @@ $(document).ready(() => {
     const color5 = $('.card-5 p')[0].innerText;
     const palette = { name, color1, color2, color3, color4, color5 }
   
-    postPalette(palette, id);
+    const { palette_id } = await postPalette(palette, id);
     appendPalette(palette, id);
   }
 
@@ -163,6 +163,7 @@ $(document).ready(() => {
     }
 
     const response = await fetch(url, options);
+    return await response.json();
   }
 
   function appendPalette(palette, id) {
@@ -170,5 +171,19 @@ $(document).ready(() => {
     const paletteElement = createPaletteElements([palette])
     project.append(paletteElement);
   }
+
+  async function deletePalette(event) {
+    const palette = event.target.parentElement;
+    const url = `http://localhost:3000/api/v1/palettes/${ palette.id }`;
+    const options = {
+      method: 'DELETE'
+    }
+
+    const response = await fetch(url, options)
+    if (response.status === 200) {
+      palette.remove();
+    }
+  };
+
 
 })
