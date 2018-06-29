@@ -20,6 +20,24 @@ $(document).ready(() => {
   $('.create-project-form').on('submit', addProject);
   $('.save-palette').on('submit', savePalette);
   $('.projects-container').on('click', '.delete-palette-button', deletePalette);
+  $('.projects-container').on('click', '.palette', getPaletteColors);
+
+  function getPaletteColors(event) {
+    const hexColors = [];
+
+   $(this).children('div').each(function() {
+      hexColors.push($(this)[0].id)  
+    })
+
+    updatePalette(hexColors);
+  }
+
+  function updatePalette(colors) {
+    allCards.forEach((card, i) => {
+      card.css('background-color', colors[i]);
+      card.children('p').text(colors[i]);
+    })
+  }
 
   function getRandomColor() {
     const letters = '0123456789ABCDEF'.split('');
@@ -119,11 +137,11 @@ $(document).ready(() => {
         const paletteElement = `
           <div class="palette" id=${ id }>
             <h4>${ name }</h4>
-            <div style="background-color:${ color1 };"></div>
-            <div style="background-color:${ color2 };"></div>
-            <div style="background-color:${ color3 };"></div>
-            <div style="background-color:${ color4 };"></div>
-            <div style="background-color:${ color5 };"></div>
+            <div id=${ color1 } style="background-color:${ color1 };"></div>
+            <div id=${ color2 } style="background-color:${ color2 };"></div>
+            <div id=${ color3 } style="background-color:${ color3 };"></div>
+            <div id=${ color4 } style="background-color:${ color4 };"></div>
+            <div id=${ color5 } style="background-color:${ color5 };"></div>
             <button class="delete-palette-button"></button>
           </div>
         `;
