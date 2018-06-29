@@ -19,7 +19,7 @@ describe('client routes', () => {
       })
   })
 
-  it.skip('should return a 404 for a route that does not exist', done => {
+  it('should return a 404 for a route that does not exist', done => {
     chai.request(server)
       .get('/palettes-are-fun')
       .end((error, response) => {
@@ -71,7 +71,7 @@ describe('api routes', () => {
   })
 
   describe('GET /api/v1/projects/:id', () => {
-    it.skip('should return a specific project', done => {
+    it('should return a specific project', done => {
       chai.request(server)
         .get('/api/v1/projects/1')
         .end((error, response) => {
@@ -86,18 +86,19 @@ describe('api routes', () => {
         })
     })
 
-    it.skip('should return a 404 if the project was not found', done => {
+    it('should return a 404 if the project was not found', done => {
       chai.request(server)
         .get('/api/v1/projects/3')
         .end((err, response) => {
           response.should.have.status(404);
+          done();
         })
     })
 
   })
 
   describe('GET /api/v1/projects/:id/palettes', () => {
-    it.skip('should return an array of palettes for a specific project', done => {
+    it('should return an array of palettes for a specific project', done => {
       chai.request(server)
         .get('/api/v1/projects/1/palettes')
         .end((err, response) => {
@@ -108,7 +109,7 @@ describe('api routes', () => {
           response.body[0].should.have.property('name');
           response.body[0].name.should.equal('greens');
           response.body[0].should.have.property('project_id');
-          response.body[0].project_id.should.equal('1');
+          response.body[0].project_id.should.equal(1);
           response.body[0].should.have.property('color1');
           response.body[0].color1.should.equal('#111111');
           response.body[0].should.have.property('color2');
@@ -123,7 +124,7 @@ describe('api routes', () => {
         })
     })
 
-    it.skip('should return an empty array if no palettes match the project', done => {
+    it('should return an empty array if no palettes match the project', done => {
       chai.request(server)
         .get('/api/v1/projects/2/palettes')
         .end((err, response) => {
@@ -138,7 +139,7 @@ describe('api routes', () => {
   })
 
   describe('GET /api/v1/palettes/:id', () => {
-    it.skip('should return a palette object', done => {
+    it('should return a palette object', done => {
       chai.request(server)
         .get('/api/v1/palettes/1')
         .end((err, response) => {
@@ -148,7 +149,7 @@ describe('api routes', () => {
           response.body.should.have.property('name');
           response.body.name.should.equal('greens');
           response.body.should.have.property('project_id');
-          response.body.project_id.should.equal('1');
+          response.body.project_id.should.equal(1);
           response.body.should.have.property('color1');
           response.body.color1.should.equal('#111111');
           response.body.should.have.property('color2');
@@ -163,7 +164,7 @@ describe('api routes', () => {
         })
     })
 
-    it.skip('should return a 404 if no palette was found', done => {
+    it('should return a 404 if no palette was found', done => {
       chai.request(server)
         .get('/api/v1/palettes/100')
         .end((err, response) => {
@@ -175,7 +176,7 @@ describe('api routes', () => {
   })
 
   describe('POST /api/v1/projects', () => {
-    it.skip('should add a project to the database', done => {
+    it('should add a project to the database', done => {
       chai.request(server)
         .post('/api/v1/projects')
         .send({
@@ -191,7 +192,7 @@ describe('api routes', () => {
         })
     })
 
-    it.skip('should not add a project if the correct params were not sent', done => {
+    it('should not add a project if the correct params were not sent', done => {
       chai.request(server)
         .post('/api/v1/projects')
         .end((err, response) => {
@@ -203,7 +204,7 @@ describe('api routes', () => {
   })
 
   describe('POST /api/v1/palettes', () => {
-    it.skip('should add a palette to the database', done => {
+    it('should add a palette to the database', done => {
       chai.request(server)
         .post('/api/v1/projects/1/palettes')
         .send({
@@ -225,7 +226,7 @@ describe('api routes', () => {
         })
     })
 
-    it.skip('should not add a palette if any params are missing', done => {
+    it('should not add a palette if any params are missing', done => {
       chai.request(server)
         .post('/api/v1/projects/1/palettes')
         .send({
@@ -243,9 +244,18 @@ describe('api routes', () => {
         })
     })
 
-    it.skip('should not add a palette if the project was not found', done => {
+    it('should not add a palette if the project was not found', done => {
       chai.request(server)
         .post('/api/v1/projects/111/palettes')
+        .send({
+          name: 'pal',
+          project_id: '1',
+          color1: 'red',
+          color2: 'green',
+          color3: 'blue',
+          color4: 'yellow',
+          color5: 'marigold'
+        })
         .end((err, response) => {
           response.should.have.status(404);
           response.body.error.should.equal('Could not find project with id 111.')
@@ -255,12 +265,11 @@ describe('api routes', () => {
   })
 
   describe('DELETE /api/v1/palettes/:id', () => {
-    it.skip('should delete a palette from the database', done => {
+    it('should delete a palette from the database', done => {
       chai.request(server)
         .delete('/api/v1/palettes/1')
         .end((err, response) => {
           response.should.have.status(200);
-          response.body.should.equal('Deleted 1 palette with id 1.');
           chai.request(server)
             .get('/api/v1/palettes/1')
             .end((err, response) => {
@@ -271,7 +280,7 @@ describe('api routes', () => {
         })
     })
 
-    it.skip('should send a 404 if the project was not found', done => {
+    it('should send a 404 if the project was not found', done => {
       chai.request(server)
         .delete('/api/v1/palettes/81')
         .end((err, response) => {
