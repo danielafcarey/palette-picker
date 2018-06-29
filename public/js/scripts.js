@@ -20,28 +20,16 @@ $(document).ready(() => {
   $('.create-project-form').on('submit', addProject);
   $('.save-palette').on('submit', savePalette);
   $('.projects-container').on('click', '.delete-palette-button', deletePalette);
-  // $('.projects-container').on('click', '.palette', getPaletteColors);
+  $('.projects-container').on('click', '.palette', getPaletteColors);
 
   function getPaletteColors(event) {
+    const hexColors = [];
 
-    const selectedPalette = $(`#${ event.currentTarget.id }.palette`)
-    const colorCards = $(selectedPalette).children('div');
-    console.log(colorCards);
-    const colors = $(colorCards).map(card => {
-      debugger;
-    //   const rgbString = card.style.backgroundColor;
-    //   const rgbNums = rgbString.match(/\d+/g);
-    //   return covertToHex(rgbNums);
+   $(this).children('div').each(function() {
+      hexColors.push($(this)[0].id)  
     })
 
-    // updatePalette(colors);
-  }
-
-  function convertToHex(numArray) {
-    return '#' + numArray.map(num => {
-      const hex = num.toString(16)
-      return hex.length === 1 ? '0' + hex : hex
-    }).join('')
+    updatePalette(hexColors);
   }
 
   function updatePalette(colors) {
@@ -149,11 +137,11 @@ $(document).ready(() => {
         const paletteElement = `
           <div class="palette" id=${ id }>
             <h4>${ name }</h4>
-            <div style="background-color:${ color1 };"></div>
-            <div style="background-color:${ color2 };"></div>
-            <div style="background-color:${ color3 };"></div>
-            <div style="background-color:${ color4 };"></div>
-            <div style="background-color:${ color5 };"></div>
+            <div id=${ color1 } style="background-color:${ color1 };"></div>
+            <div id=${ color2 } style="background-color:${ color2 };"></div>
+            <div id=${ color3 } style="background-color:${ color3 };"></div>
+            <div id=${ color4 } style="background-color:${ color4 };"></div>
+            <div id=${ color5 } style="background-color:${ color5 };"></div>
             <button class="delete-palette-button"></button>
           </div>
         `;
