@@ -54,7 +54,7 @@ $(document).ready(() => {
   }
 
   async function getAllProjects() {
-    const url = 'http://localhost:3000/api/v1/projects';
+    const url = '/api/v1/projects';
     const response = await fetch(url);
     const projects = await response.json();
     const fullProjectPromises = projects.map(async project => {
@@ -69,7 +69,7 @@ $(document).ready(() => {
   async function addProject(event) {
     event.preventDefault();
     const name = $('.create-project-form :input').val();
-    const url = 'http://localhost:3000/api/v1/projects'
+    const url = '/api/v1/projects'
     const options = {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -90,7 +90,7 @@ $(document).ready(() => {
   }
 
   async function getProjectPalettes(project_id) {
-    const url = `http://localhost:3000/api/v1/projects/${project_id}/palettes`;
+    const url = `/api/v1/projects/${project_id}/palettes`;
     const response = await fetch(url);
     const projectPalettes = await response.json();
 
@@ -160,7 +160,7 @@ $(document).ready(() => {
   }
 
   async function postPalette(palette, id) {
-    const url = `http://localhost:3000/api/v1/projects/${ id }/palettes`
+    const url = `/api/v1/projects/${ id }/palettes`
     const options = {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -179,7 +179,7 @@ $(document).ready(() => {
 
   async function deletePalette(event) {
     const palette = event.target.parentElement;
-    const url = `http://localhost:3000/api/v1/palettes/${ palette.id }`;
+    const url = `/api/v1/palettes/${ palette.id }`;
     const options = {
       method: 'DELETE'
     }
