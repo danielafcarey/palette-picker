@@ -75,14 +75,18 @@ $(document).ready(() => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ name }) 
     }
+    const matchingCurrentProjects = $('.project-options option[value="' + name + '"]');
 
-    const response = await fetch(url, options);
-    const { project_id } = await response.json();
-    const projectPalettes = await getProjectPalettes(project_id);
-    const project = { id: project_id, name, projectPalettes }
-    
-    appendProject(project);
-    updateProjectOptions(project);
+    if (!matchingCurrentProjects.length) {
+      const response = await fetch(url, options);
+      const { project_id } = await response.json();
+      const projectPalettes = await getProjectPalettes(project_id);
+      const project = { id: project_id, name, projectPalettes }
+
+      appendProject(project);
+      updateProjectOptions(project);
+      $('.create-project-form :input').val('');
+    }
   }
 
   async function getProjectPalettes(project_id) {
