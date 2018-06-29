@@ -154,7 +154,7 @@ button:hover {
   padding-left: 5px;
 }
 
-.projects button {
+.create-project-form button {
   width: 80%;
   height: 25px;
   font-size: 14px;
@@ -163,10 +163,42 @@ button:hover {
   color: #232323;
 }
 
+.projects-container {
+  grid-area: 2/1/3/3;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 80px;
+}
+
+.project {
+  width: 450px;
+  text-align: left;
+  margin: 20px;
+}
+
+.project-palettes {
+  display: flex;
+  flex-direction: column;
+}
+
+.palette {
+  margin: 10px;
+}
+
 .palette div {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
+  margin: 0 5px;
+}
+
+.palette button {
+  background: none;
+  border:none;
+  background-image: url('../delete.png');
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
 }
 
 

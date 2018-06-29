@@ -120,7 +120,7 @@ $(document).ready(() => {
             <div style="background-color:${ color3 };"></div>
             <div style="background-color:${ color4 };"></div>
             <div style="background-color:${ color5 };"></div>
-            <button class="delete-palette-button"> X </button>
+            <button class="delete-palette-button"></button>
           </div>
         `;
         return allPalettes + paletteElement
