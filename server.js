@@ -3,9 +3,9 @@ const app = express();
 let { projects, palettes } = require('./mockData.js');
 const bodyParser = require('body-parser');
 
-const env = process.env.NODE_ENV || 'development';
-const config = require('./knexfile')[env];
-const database = require('knex')(config);
+// const env = process.env.NODE_ENV || 'development';
+// const config = require('./knexfile')[env];
+const database = require('./db/knex');
 
 app.use(bodyParser.json());
 
@@ -88,7 +88,7 @@ app.post('/api/v1/projects', (request, response) => {
 
   if (!project.name) {
     return response.status(422).send({
-      error: `Expected format: { name: <String> }. You're missing a name property.`
+      error: 'Expected format: { name: <String> }. You\'re missing a name property.'
     }); 
   }
 
@@ -142,39 +142,6 @@ app.post('/api/v1/projects/:project_id/palettes', (request, response) => {
 });
 
 
-// DELETE A PROJECT
-app.delete('/api/v1/projects/:id', (request, response) => {
-  const { id } = request.params;
-
-  database('projects').where('id', id).select()
-    .then(project => {
-      if (!project.length) {
-        response.status(404).send({
-          error: `Could not find project with id ${ id }.`
-        })
-      } else {
-        database('palettes').where('project_id', id).del()
-          .then(() => {
-            database('projects').where('id', id).del()
-              .then(deletedProject => {
-                response.status(200).send(`Deleted ${ deletedProject } project of id ${ id }.`)
-              })
-              .catch(error => {
-                response.status(500).json({ error })
-              })
-          })
-          .catch(error => {
-            response.status(500).json({ error })
-          })
-      }
-    })
-    .catch(error => {
-      response.status(500).json({ error })
-    });
-
-})
-
-
 // DELETE A PALETTE FROM A PROJECT
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
@@ -204,3 +171,6 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`Palette Picker is running on ${app.get('port')}`)
 })
+
+
+module.exports = app;
