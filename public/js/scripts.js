@@ -20,6 +20,36 @@ $(document).ready(() => {
   $('.create-project-form').on('submit', addProject);
   $('.save-palette').on('submit', savePalette);
   $('.projects-container').on('click', '.delete-palette-button', deletePalette);
+  // $('.projects-container').on('click', '.palette', getPaletteColors);
+
+  function getPaletteColors(event) {
+
+    const selectedPalette = $(`#${ event.currentTarget.id }.palette`)
+    const colorCards = $(selectedPalette).children('div');
+    console.log(colorCards);
+    const colors = $(colorCards).map(card => {
+      debugger;
+    //   const rgbString = card.style.backgroundColor;
+    //   const rgbNums = rgbString.match(/\d+/g);
+    //   return covertToHex(rgbNums);
+    })
+
+    // updatePalette(colors);
+  }
+
+  function convertToHex(numArray) {
+    return '#' + numArray.map(num => {
+      const hex = num.toString(16)
+      return hex.length === 1 ? '0' + hex : hex
+    }).join('')
+  }
+
+  function updatePalette(colors) {
+    allCards.forEach((card, i) => {
+      card.css('background-color', colors[i]);
+      card.children('p').text(colors[i]);
+    })
+  }
 
   function getRandomColor() {
     const letters = '0123456789ABCDEF'.split('');
